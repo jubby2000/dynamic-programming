@@ -59,21 +59,20 @@ class DynamicProgramming
   end
 
   def super_frog_hops(n, k)
-    super_frog_cache_builder(n, k)
+    super_frog_hops_helper(n, k)
     @super_frog_cache[n]
   end
 
-  def super_frog_cache_builder(maxStairs, maxJump)
-    return @super_frog_cache if maxJump < 1 || maxStairs < 1
-    debugger
-    (1..maxJump).each do |i|
-      # maxJump.downto(1)
-      i.downto(0).each do |j|
-        @super_frog_cache[i] += @super_frog_cache[j]
-      end
-    end
-    
-    return cache
+  def super_frog_hops_helper(numStairs, maxJump)
+    return @super_frog_cache[numStairs] if @super_frog_cache[numStairs]
+    ans = []
+    maxJump = numStairs if numStairs < maxJump
+    numStairs.downto(1).each do |stair|
+      ans += super_frog_hops_helper(stair - 1, maxJump).map { |el| [maxJump] + el }
+      # debugger
+    end  
+    @super_frog_cache[numStairs] = ans
+    # @super_frog_cache[numStairs]
   end
 
   def knapsack(weights, values, capacity)
